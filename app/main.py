@@ -5,7 +5,6 @@ from app.schemas import TaskCreate, Task, TaskUpdate
 from fastapi import HTTPException
 from typing import Optional
 
-
 app = FastAPI()
 
 app.add_middleware(

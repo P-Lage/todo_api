@@ -2,12 +2,17 @@ from app import models, schemas, database
 
 def create_task(task: schemas.TaskCreate):
     db = database.SessionLocal()
-    db_task = models.Task(title=task.title, completed=task.completed)
+    db_task = models.Task(
+        title=task.title,
+        completed=task.completed,
+        due_date=task.due_date
+    )
     db.add(db_task)
     db.commit()
     db.refresh(db_task)
     db.close()
     return db_task
+
 
 def get_tasks(completed=None, skip=0, limit=10, order_by="id"):
     db = database.SessionLocal()
