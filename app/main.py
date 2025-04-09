@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from app import models, database, crud
 from fastapi.middleware.cors import CORSMiddleware
-from app.schemas import TaskCreate, Task
+from app.schemas import TaskCreate, Task, TaskUpdate
+from fastapi import HTTPException
 
 app = FastAPI()
 
@@ -30,3 +31,10 @@ def read_tasks():
 @app.delete("/tasks/{task_id}")
 def delete_task(task_id: int):
     return crud.delete_task(task_id)
+
+@app.patch("/tasks/{task_id}", response_model=Task)
+def update_task(task_id: int, task_data: TaskUpdate):
+    task = crud.update_task(task_id, task_data)
+    if not task:
+        raise HTTPException(status_code=404, detail="Tarefa não encontrada")
+    return task

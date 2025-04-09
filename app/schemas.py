@@ -9,3 +9,7 @@ class Task(TaskCreate):
 
     class Config:
         orm_mode = True
+
+class TaskUpdate(BaseModel):
+    title: str | None = None
+    completed: bool | None = None
