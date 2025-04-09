@@ -9,11 +9,19 @@ def create_task(task: schemas.TaskCreate):
     db.close()
     return db_task
 
-def get_tasks():
+def get_tasks(completed=None, skip=0, limit=10, order_by="id"):
     db = database.SessionLocal()
-    tasks = db.query(models.Task).all()
+    query = db.query(models.Task)
+    if completed is not None:
+        query = query.filter(models.Task.completed == completed)
+
+    if hasattr(models.Task, order_by):
+        query = query.order_by(getattr(models.Task, order_by))
+
+    tasks = query.offset(skip).limit(limit).all()
     db.close()
     return tasks
+
 
 def delete_task(task_id: int):
     db = database.SessionLocal()
